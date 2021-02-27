@@ -6,8 +6,8 @@ bam=${sam%.sam}.bam
 samtools faidx $ref
 picard CreateSequenceDictionary -R $ref
 refname=$(grep '>' $ref | sed 's,>,,g')
-/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools view -b $sam -o $bam
-/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools index $bam
+samtools view -b $sam -o $bam
+samtools index $bam
 echo $refname
 echo '#DisSTDV=Distance Standard Deviation' >>result.txt
 echo 'Pos\tRef\tAlt\tDisSTDV'  >>result.txt
@@ -25,8 +25,8 @@ do
 	posread='variant_read.txt'
 	posposition='variant_pos.txt'
 	poslen='variant_read_length.txt'
-	/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools view $bam $region -o $possam
-	java -jar /Users/renyao/Desktop/all/my_code/jvarkit/dist/biostar59647.jar -r $ref $possam -o $posxml
+	samtools view $bam $region -o $possam
+	java -jar /jvarkit/dist/biostar59647.jar -r $ref $possam -o $posxml
 	sed -e $'s/\<read\>/\\\n/g' $posxml | grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" | sed -e $'s,\/\>\<,\\\n,g' > $posread
 	grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" $posread | cut -d ' ' -f2 |sed 's/read\-index\=//g' | sed 's,",,g'> $posposition
 	grep -B1 '/align' $posread | grep 'ref-index' |cut -d ' ' -f2 |sed 's/read\-index\=//g'| sed 's,",,g'> $poslen
