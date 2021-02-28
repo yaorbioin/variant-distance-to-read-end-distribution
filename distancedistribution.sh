@@ -2,6 +2,7 @@
 bcftools query -f'[%POS\t%REF\t%ALT\n]' TEST.vcf > fix.vcf
 ref=$1
 sam=$2
+xmldir=$3
 bam=${sam%.sam}.bam
 samtools faidx $ref
 picard CreateSequenceDictionary -R $ref
@@ -26,7 +27,7 @@ do
 	posposition='variant_pos.txt'
 	poslen='variant_read_length.txt'
 	samtools view $bam $region -o $possam
-	java -jar /jvarkit/dist/biostar59647.jar -r $ref $possam -o $posxml
+	java -jar ${xmldir} -r $ref $possam -o $posxml
 	sed -e $'s/\<read\>/\\\n/g' $posxml | grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" | sed -e $'s,\/\>\<,\\\n,g' > $posread
 	grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" $posread | cut -d ' ' -f2 |sed 's/read\-index\=//g' | sed 's,",,g'> $posposition
 	grep -B1 '/align' $posread | grep 'ref-index' |cut -d ' ' -f2 |sed 's/read\-index\=//g'| sed 's,",,g'> $poslen
