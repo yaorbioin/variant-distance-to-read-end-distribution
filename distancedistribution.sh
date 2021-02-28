@@ -33,6 +33,7 @@ do
 	grep -B1 '/align' $posread | grep 'ref-index' |cut -d ' ' -f2 |sed 's/read\-index\=//g'| sed 's,",,g'> $poslen
 	stdv=$(python varaintpostionsdv.py)
 	echo $pos'\t'$refbase'\t'$altbase'\t'$stdv  >>result.txt
+	rm $possam $posxml $posread $posposition $poslen 
 done < fix.vcf
 
 
