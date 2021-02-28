@@ -26,7 +26,7 @@ do
 	posread='variant_read.txt'
 	posposition='variant_pos.txt'
 	poslen='variant_read_length.txt'
-	samtools view $bam $region -o $possam
+	samtools view -h $bam $region -o $possam
 	java -jar ${xmldir} -r $ref $possam -o $posxml
 	sed -e $'s/\<read\>/\\\n/g' $posxml | grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" | sed -e $'s,\/\>\<,\\\n,g' > $posread
 	grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" $posread | cut -d ' ' -f2 |sed 's/read\-index\=//g' | sed 's,",,g'> $posposition
