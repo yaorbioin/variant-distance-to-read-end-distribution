@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import statistics 
-lenfile = open('variant_pos.txt','r').readlines()
-positionfile = open('variant_read_length.txt','r').readlines()
+lenfile = open('variant_read_length.txt','r').readlines()
+positionfile = open('variant_pos.txt','r').readlines()
 distance = []
 for i in range(len(lenfile)):
     lenfile[i]=int(lenfile[i])
