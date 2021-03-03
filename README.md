@@ -5,7 +5,7 @@ Installation you will need 1. SAMTOOLS 2.BCFTOOLS 3.jvarkit-Biostar59647 (http:/
 
 Executing the pipeline
 
-bash distancedistribution.sh Reference.fa Samfile.sam dir_to_Biostar59647.jar
+bash distancedistribution.sh Reference.fa Samfile.sam dir_to_Biostar59647.jar vcffile.vcf
 
 dir_to_Biostar59647.jar is under /jvarkit/dist/biostar59647.jar
 
