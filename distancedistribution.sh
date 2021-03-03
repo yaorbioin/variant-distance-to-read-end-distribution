@@ -5,11 +5,11 @@ vcf=$3
 xmldir=$4
 bcftools query -f'[%POS\t%REF\t%ALT\n]' $vcf > fix.vcf
 bam=${sam%.sam}.bam
-/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools faidx $ref
+samtools faidx $ref
 picard CreateSequenceDictionary -R $ref
 refname=$(grep '>' $ref | sed 's,>,,g')
-/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools view -b $sam -o $bam
-/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools index $bam
+samtools view -b $sam -o $bam
+samtools index $bam
 echo '#DisSTDV=Distance Standard Deviation' >>result.txt
 echo 'Pos\tRef\tAlt\tDisSTDV'  >>result.txt
 while read line
@@ -25,7 +25,7 @@ do
 	posread='variant_read.txt'
 	posposition='variant_pos.txt'
 	poslen='variant_read_length.txt'
-	/Users/renyao/Desktop/all/my_code/samtools-1.9/samtools view -h $bam $region -o $possam
+	samtools view -h $bam $region -o $possam
 	java -jar $xmldir -r $ref $possam -o $posxml
 	tr 'q' '\n' < $posxml | grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" | tr '>' '\n' > $posread
 	grep "read-base=\"$altbase\"\ ref-index=\"$pos\"\ ref-base=\"$refbase\"" $posread | cut -d ' ' -f2 |sed 's/read\-index\=//g' | sed 's,",,g'> $posposition
